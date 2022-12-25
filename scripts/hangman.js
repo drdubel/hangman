@@ -6,7 +6,7 @@ var password2 = "";
 var misses = 0;
 
 var yes = new Audio("sounds/yes.wav");
-var no1 = new Audio("sounds/no.wav");
+var no = new Audio("sounds/no.wav");
 
 for (i = 0; i < length; i++) {
     if (password.charAt(i) == ' ') password2 = password2 + " ";
@@ -17,9 +17,9 @@ function write_password() {
     document.getElementById("phrase").innerHTML = password2;
 }
 
-window.onload = start;
+window.onload = init;
 
-function start() {
+function init() {
     var divv = "";
 
     for (i = 0; i < 26; i++) {
@@ -38,17 +38,17 @@ String.prototype.setChar = function (place, char) {
     else return this.substr(0, place) + char + this.substr(place + 1);
 }
 
-function check(no) {
+function check(letter_index) {
     var hit = false;
     for (i = 0; i < length; i++) {
-        if (password.charAt(i) == letters[no]) {
-            password2 = password2.setChar(i, letters[no]);
+        if (password.charAt(i) == String.fromCharCode(65 + letter_index)) {
+            password2 = password2.setChar(i, String.fromCharCode(65 + letter_index));
             hit = true;
         }
     }
     if (hit == true) {
         yes.play();
-        var element = "let" + no;
+        var element = "let" + letter_index;
         document.getElementById(element).style.background = "#003300";
         document.getElementById(element).style.color = "#00C000";
         document.getElementById(element).style.border = "3px solid #00C000";
@@ -56,8 +56,8 @@ function check(no) {
         write_password();
     }
     else {
-        no1.play();
-        var element = "let" + no;
+        no.play();
+        var element = "let" + letter_index;
         document.getElementById(element).style.background = "#330000";
         document.getElementById(element).style.color = "#C00000";
         document.getElementById(element).style.border = "3px solid #C00000";
@@ -67,12 +67,10 @@ function check(no) {
         var pic = "images/s" + misses + ".jpg";
         document.getElementById("gallows").innerHTML = '<img src="' + pic + '"alt = ""/>';
     }
-    //win
     if (password == password2)
         document.getElementById("alphabet").innerHTML = "YOU WON! Correct password is: " + password +
             '<br/><br/><span class="reset" onclick="location.reload()">AGAIN?</span>';
 
-    //lose
     if (misses >= 9)
         document.getElementById("alphabet").innerHTML = "YOU LOST! Correct password is: " + password +
             '<br/><br/><span class="reset" onclick="location.reload()">AGAIN?</span>';
